@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block title %}ICU Risk Predictions{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<!-- Header -->
+	<div class="row mb-4">
+		<div class="col-12">
+			<div class="d-flex justify-content-between align-items-center">
+				<div>
+					<h1 class="h3 mb-0">
+						<i class="fas fa-heartbeat text-primary me-2"></i>
+						ICU Risk Prediction System
+					</h1>
+					<p class="text-muted mb-0">Advanced AI for ICU admission risk assessment</p>
+				</div>
+				<div class="text-end">
+					<div class="d-flex align-items-center gap-3">
+						<div class="text-muted small">
+							<i class="fas fa-clock me-1"></i>
+							Last Updated: <span id="last-update-time">{{ last_update or 'Never' }}</span>
+						</div>
+						<button class="btn btn-primary btn-sm" onclick="triggerPrediction()" id="refresh-btn" 
+								data-bs-toggle="tooltip" data-bs-placement="bottom" 
+								title="Search for latest patient data file and update predictions">
+							<i class="fas fa-sync-alt me-1"></i>
+							Refresh Predictions
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Main Content -->
+	<div class="row">
+		<div class="col-12 mb-3">
+			<div class="alert alert-info border-0 shadow-sm mb-0" role="alert">
+				<strong>Public demo:</strong> this dashboard runs on synthetic patient records and deterministic heuristic scores.
+				Private clinical data, deployment infrastructure, and trained model binaries are excluded from this release.
+			</div>
+		</div>
+		<!-- Risk Summary Section -->
+		<div class="col-lg-12">
+			<div class="card border-0 shadow-sm">
+				<div class="card-header bg-light">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">
+							<i class="fas fa-chart-pie me-2"></i>
+							Risk Distribution Summary
+						</h5>
+						<div class="d-flex align-items-center">
+							<span class="me-3">
+								<i class="fas fa-users me-1"></i>
+								Total Patients: <strong id="total-patients">{{ predictions|length }}</strong>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-lg-4">
+							<canvas id="riskDistributionChart" width="300" height="300"></canvas>
+						</div>
+						<div class="col-lg-8">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="risk-summary-card low-risk">
+										<div class="risk-count" id="low-risk-count">0</div>
+										<div class="risk-label">Low Risk (Safe)</div>
+										<div class="risk-range" id="low-risk-percentage">0%</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="risk-summary-card moderate-risk">
+										<div class="risk-count" id="moderate-risk-count">0</div>
+										<div class="risk-label">Medium Risk (Monitoring)</div>
+										<div class="risk-range" id="moderate-risk-percentage">0%</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="risk-summary-card high-risk">
+										<div class="risk-count" id="high-risk-count">0</div>
+										<div class="risk-label">High Risk (Urgent)</div>
+										<div class="risk-range" id="high-risk-percentage">0%</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Patient Predictions Table -->
+	<div class="row mt-4">
+		<div class="col-12">
+			<div class="card border-0 shadow-sm">
+				<div class="card-header bg-light">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">
+							<i class="fas fa-table me-2"></i>
+							Patient Predictions
+						</h5>
+						<div class="d-flex align-items-center gap-2">
+							<div class="input-group" style="width: 300px;">
+								<span class="input-group-text">
+									<i class="fas fa-search"></i>
+								</span>
+								<input type="text" class="form-control" id="patient-search" placeholder="Search patients...">
+							</div>
+							<div class="dropdown me-2">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="locationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="fas fa-map-marker-alt me-1"></i>
+									All Locations
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="locationDropdown" id="location-menu">
+									<li><a class="dropdown-item" href="#">
+										<i class="fas fa-globe me-2"></i>All Locations
+									</a></li>
+								</ul>
+							</div>
+							<div class="dropdown">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="fas fa-sort me-1"></i>
+									Sort by Risk
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="sortDropdown">
+									<li><a class="dropdown-item" href="#">
+										<i class="fas fa-sort-amount-down me-2"></i>High to Low Risk
+									</a></li>
+									<li><a class="dropdown-item" href="#">
+										<i class="fas fa-sort-amount-up me-2"></i>Low to High Risk
+									</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">
+										<i class="fas fa-sort-numeric-down me-2"></i>Room (Low to High)
+									</a></li>
+									<li><a class="dropdown-item" href="#">
+										<i class="fas fa-sort-numeric-up me-2"></i>Room (High to Low)
+									</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body p-0">
+					<div class="table-responsive">
+						<table class="table table-hover mb-0" id="predictions-table">
+							<thead class="table-dark">
+								<tr>
+									<th>Patient Name</th>
+									<th>MRN</th>
+									<th>Location</th>
+									<th>Room</th>
+							<th>Cohort</th>
+									<th>Admission Date</th>
+									<th>ICU Risk</th>
+									<th>Risk Level</th>
+									<th>Feedback</th>
+								</tr>
+							</thead>
+							<tbody id="predictions-tbody">
+								{% for patient in predictions %}
+								<tr data-risk="{{ patient.risk_level.lower() }}">
+									<td><strong>{{ patient.patient_name }}</strong></td>
+									<td>{{ patient.mrn }}</td>
+									<td>{{ patient.location }}</td>
+									<td>{{ patient.room }}</td>
+									<td>
+										{% set cohort = 'Hematology' if patient.model_used == 'hematology' else 'Non-Hematology' %}
+										<span class="badge {% if patient.model_used == 'hematology' %}bg-danger{% else %}bg-light text-dark border{% endif %}">
+											{{ cohort }}
+										</span>
+									</td>
+									<td>{{ patient.admission_date }}</td>
+									<td>
+										<div class="d-flex align-items-center">
+											<div class="progress me-2" style="width: 100px; height: 20px;">
+												{% set risk_label = patient.risk_level %}
+												{% set bar_class = 'bg-success' %}
+												{% if 'Medium Risk' in risk_label %}{% set bar_class = 'bg-warning' %}{% elif 'High Risk' in risk_label %}{% set bar_class = 'bg-danger' %}{% endif %}
+												<div class="progress-bar {{ bar_class }}"
+													style="width: {{ (patient.icu_risk_probability * 100)|round(1) }}%">
+												</div>
+											</div>
+											<span class="fw-bold">{{ (patient.icu_risk_probability * 100)|round(1) }}%</span>
+										</div>
+									</td>
+									<td>
+										<span class="badge 
+											{% if 'Low Risk' in patient.risk_level %}bg-success
+											{% elif 'Medium Risk' in patient.risk_level %}bg-warning
+											{% else %}bg-danger{% endif %}">
+											{{ patient.risk_level }}
+										</span>
+									</td>
+									<td>
+										<div class="btn-group" role="group">
+											<button class="btn btn-sm btn-outline-success rounded-pill px-3 feedback-btn" title="Looks good" data-feedback="up" aria-label="Thumbs up">
+												<i class="fas fa-thumbs-up"></i>
+											</button>
+											<button class="btn btn-sm btn-outline-danger rounded-pill px-3 feedback-btn" title="Needs attention" data-feedback="down" aria-label="Thumbs down">
+												<i class="fas fa-thumbs-down"></i>
+											</button>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+// --- ICU Risk Prediction Dashboard JS ---
+const predictionsData = {{ predictions|tojson }};
+
+function updateRiskDistributionFromTable() {
+	const source = Array.isArray(predictionsData) && predictionsData.length ? predictionsData : null;
+	let low = 0, moderate = 0, high = 0, total = 0;
+
+	if (source) {
+		source.forEach(p => {
+			const risk = (p.risk_level || '').trim();
+			if (risk.startsWith('Low Risk')) low++;
+			else if (risk.startsWith('Medium Risk')) moderate++;
+			else if (risk.startsWith('High Risk')) high++;
+		});
+		total = source.length;
+	} else {
+		const rows = Array.from(document.querySelectorAll('#predictions-tbody tr')).filter(row => row.style.display !== 'none');
+		rows.forEach(row => {
+			const badge = row.querySelector('td .badge');
+			if (!badge) return;
+			const risk = badge.textContent.trim();
+			if (risk.startsWith('Low Risk')) low++;
+			else if (risk.startsWith('Medium Risk')) moderate++;
+			else if (risk.startsWith('High Risk')) high++;
+		});
+		total = low + moderate + high;
+	}
+
+	document.getElementById('low-risk-count').textContent = low;
+	document.getElementById('moderate-risk-count').textContent = moderate;
+	document.getElementById('high-risk-count').textContent = high;
+	document.getElementById('low-risk-percentage').textContent = total ? ((low/total)*100).toFixed(1) + '%' : '0%';
+	document.getElementById('moderate-risk-percentage').textContent = total ? ((moderate/total)*100).toFixed(1) + '%' : '0%';
+	document.getElementById('high-risk-percentage').textContent = total ? ((high/total)*100).toFixed(1) + '%' : '0%';
+	document.getElementById('total-patients').textContent = total;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	// Format Last Updated as 'D Month YYYY, HH:MM'
+	const lastUpdateEl = document.getElementById('last-update-time');
+	if (lastUpdateEl && lastUpdateEl.textContent && lastUpdateEl.textContent !== 'Never') {
+		const d = new Date(lastUpdateEl.textContent);
+		if (!isNaN(d)) {
+			lastUpdateEl.textContent = d.toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+		}
+	}
+
+	const tbody = document.getElementById('predictions-tbody');
+	const patientSearch = document.getElementById('patient-search');
+	const locationMenu = document.getElementById('location-menu');
+	const locationDropdownBtn = document.getElementById('locationDropdown');
+
+	// Populate Location filter with unique locations from predictionsData
+	if (locationMenu && Array.isArray(predictionsData)) {
+		const locations = Array.from(new Set(predictionsData.map(p => p.location).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+		locationMenu.innerHTML = '';
+		const allLi = document.createElement('li');
+		allLi.innerHTML = '<a class="dropdown-item" href="#"><i class="fas fa-globe me-2"></i>All Locations</a>';
+		allLi.querySelector('a').addEventListener('click', function(e){
+			e.preventDefault();
+			window.filterByLocation('all');
+			if (locationDropdownBtn) locationDropdownBtn.innerHTML = '<i class="fas fa-map-marker-alt me-1"></i>All Locations';
+		});
+		locationMenu.appendChild(allLi);
+		locations.forEach(loc => {
+			const li = document.createElement('li');
+			li.innerHTML = `<a class=\"dropdown-item\" href=\"#\"><i class=\"fas fa-map-marker-alt me-2\"></i>${loc}</a>`;
+			li.querySelector('a').addEventListener('click', function(e){
+				e.preventDefault();
+				window.filterByLocation(loc);
+				if (locationDropdownBtn) locationDropdownBtn.innerHTML = `<i class=\"fas fa-map-marker-alt me-1\"></i>${loc}`;
+			});
+			locationMenu.appendChild(li);
+		});
+	}
+
+	// Implement filter and sort helpers
+	window.filterByLocation = function(location) {
+		Array.from(tbody.querySelectorAll('tr')).forEach(row => {
+			const locationCell = row.querySelector('td:nth-child(3)'); // Location column (after removing Diagnosis)
+			const matches = (location === 'all') || (locationCell && locationCell.textContent.trim() === location);
+			row.style.display = matches ? '' : 'none';
+		});
+		updateRiskDistributionFromTable();
+	};
+
+	window.sortByRisk = function(direction) {
+		const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+		rows.sort((a, b) => {
+			const aRiskEl = a.querySelector('.fw-bold');
+			const bRiskEl = b.querySelector('.fw-bold');
+			const aRisk = aRiskEl ? parseFloat(aRiskEl.textContent.replace('%','')) : 0;
+			const bRisk = bRiskEl ? parseFloat(bRiskEl.textContent.replace('%','')) : 0;
+			return direction === 'asc' ? aRisk - bRisk : bRisk - aRisk;
+		});
+		rows.forEach(row => tbody.appendChild(row));
+		updateRiskDistributionFromTable();
+		const btn = document.getElementById('sortDropdown');
+		if (btn) btn.innerHTML = direction === 'asc' ? '<i class="fas fa-sort me-1"></i>Low to High Risk' : '<i class="fas fa-sort me-1"></i>High to Low Risk';
+	};
+
+	window.sortByRoom = function(direction) {
+		const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+		rows.sort((a, b) => {
+			const aRoom = parseFloat((a.querySelector('td:nth-child(4)') || {}).textContent) || 0; // Room column (after removing Diagnosis)
+			const bRoom = parseFloat((b.querySelector('td:nth-child(4)') || {}).textContent) || 0;
+			return direction === 'asc' ? aRoom - bRoom : bRoom - aRoom;
+		});
+		rows.forEach(row => tbody.appendChild(row));
+		const btn = document.getElementById('sortDropdown');
+		if (btn) btn.innerHTML = direction === 'asc' ? '<i class="fas fa-sort-numeric-up me-1"></i>Room (Low to High)' : '<i class="fas fa-sort-numeric-down me-1"></i>Room (High to Low)';
+	};
+
+	// Wire sort menu clicks
+	document.querySelectorAll('.dropdown-menu[aria-labelledby="sortDropdown"] .dropdown-item').forEach(item => {
+		item.addEventListener('click', function(e){
+			e.preventDefault();
+			const text = this.textContent;
+			if (text.includes('High to Low Risk')) window.sortByRisk('desc');
+			else if (text.includes('Low to High Risk')) window.sortByRisk('asc');
+			else if (text.includes('Room (Low to High)')) window.sortByRoom('asc');
+			else if (text.includes('Room (High to Low)')) window.sortByRoom('desc');
+		});
+	});
+
+	// Search filter
+	patientSearch.addEventListener('input', function() {
+		const q = this.value.toLowerCase();
+		Array.from(tbody.querySelectorAll('tr')).forEach(row => {
+			const text = row.textContent.toLowerCase();
+			row.style.display = text.includes(q) ? '' : 'none';
+		});
+		updateRiskDistributionFromTable();
+	});
+
+	// Initial metrics update
+	updateRiskDistributionFromTable();
+});
+</script>
+{% endblock %} 

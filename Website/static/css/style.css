@@ -1,0 +1,764 @@
+/* 57357 Hospital Official Color Scheme */
+:root {
+	--primary: #0072BC; /* 57357 Official Blue */
+	--primary-dark: #1B4E9B; /* Dark Blue for headers */
+	--primary-light: #6285BA; /* Medium Blue for accents */
+	--orange: #F7941D; /* 57357 Official Orange - CTAs and highlights */
+	--orange-dark: #EF7F1A; /* Deep Orange for hover states */
+	--orange-light: #FFD095; /* Light Orange for subtle accents */
+	--white: #FFFFFF; /* Pure white - primary background */
+	--bg-light: #F2F2F2; /* Light gray for section backgrounds */
+	--surface: #FFFFFF; /* Card surface - white */
+	--text: #333333; /* Dark gray text for readability */
+	--text-secondary: #666666; /* Secondary text */
+	--muted: #999999; /* Muted text */
+	--border: #E0E0E0; /* Light borders */
+	--success: #28a745; /* Success green */
+	--warning: #ffc107; /* Warning yellow */
+	--danger: #dc3545; /* Danger red */
+	--info: #17a2b8; /* Info blue */
+}
+
+/* Base - 57357 Hospital Typography */
+body {
+	font-family: 'Roboto', 'Open Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+	background: var(--white);
+	color: var(--text);
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.text-muted { color: var(--muted) !important; }
+
+/* Refresh Button Styling - 57357 Style: Orange CTA */
+#refresh-btn {
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(247, 148, 29, 0.2);
+}
+
+#refresh-btn:hover {
+	background: var(--orange-dark);
+	border-color: var(--orange-dark);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(247, 148, 29, 0.3);
+}
+
+#refresh-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+}
+
+#refresh-btn .spinner-border-sm {
+	width: 1rem;
+	height: 1rem;
+}
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+
+/* Links - 57357 Style: Orange for links */
+a {
+	color: var(--primary);
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+a:hover {
+	color: var(--orange);
+	text-decoration: underline;
+}
+
+a:visited {
+	color: var(--primary-dark);
+}
+
+/* Section backgrounds - 57357 Style: Light gray for sections */
+.section-bg {
+	background-color: var(--bg-light);
+	padding: 2rem 0;
+}
+
+/* Cards - Hospital Professional Style with White & Orange */
+.card {
+	transition: all 0.3s ease;
+	border-radius: 12px;
+	border: 1px solid var(--border);
+	background: var(--white);
+	box-shadow: 0 2px 8px rgba(0, 102, 204, 0.08);
+	margin-bottom: 1.5rem;
+}
+
+.card:hover { 
+	box-shadow: 0 4px 16px rgba(0, 102, 204, 0.12);
+	transform: translateY(-2px);
+	border-top: 3px solid #000000;
+}
+
+.card-header.bg-primary {
+	background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+	color: var(--white);
+	border-bottom: 3px solid #000000;
+	font-weight: 600;
+	padding: 1rem 1.5rem;
+}
+
+.card-header.bg-light {
+	background: var(--white);
+	border-bottom: 3px solid #000000;
+	color: var(--text);
+	font-weight: 600;
+	padding: 1rem 1.5rem;
+}
+
+/* Buttons - 57357 Style: Orange for CTAs, Blue for secondary */
+.btn-primary {
+	background: var(--orange);
+	border: none;
+	color: var(--white);
+	font-weight: 600;
+	transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+	background: var(--orange-dark);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(247, 148, 29, 0.3);
+	color: var(--white);
+}
+
+.btn-outline-primary { 
+	color: var(--primary); 
+	border: 2px solid var(--primary);
+	font-weight: 600;
+	background: transparent;
+}
+
+.btn-outline-primary:hover { 
+	background-color: var(--primary); 
+	border-color: var(--primary);
+	color: var(--white);
+}
+
+/* Orange CTA button */
+.btn-orange {
+	background: var(--orange);
+	border: none;
+	color: var(--white);
+	font-weight: 600;
+}
+
+.btn-orange:hover {
+	background: var(--orange-dark);
+	color: var(--white);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(247, 148, 29, 0.3);
+}
+
+/* Inputs - Hospital Style */
+.form-control, .input-group-text {
+	background-color: #ffffff;
+	border: 2px solid var(--border);
+	color: var(--text);
+	border-radius: 8px;
+	transition: all 0.3s ease;
+}
+
+.form-control::placeholder { 
+	color: var(--muted);
+	font-style: italic;
+}
+
+.form-control:focus { 
+	border-color: var(--primary); 
+	box-shadow: 0 0 0 0.2rem rgba(0, 114, 188, 0.15);
+	outline: none;
+}
+
+.input-group-text {
+	background-color: var(--bg-light);
+	border-right: none;
+	color: var(--text-secondary);
+}
+
+/* Table - 57357 Style: Blue headers, white rows */
+.table { 
+	color: var(--text);
+	border-collapse: separate;
+	border-spacing: 0;
+	background: var(--white);
+}
+
+.table th {
+	background: var(--primary);
+	color: var(--white); 
+	border: none;
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 0.85rem;
+	letter-spacing: 0.5px;
+	padding: 1rem 0.75rem;
+}
+
+.table td { 
+	border-color: var(--border);
+	padding: 1rem 0.75rem;
+	vertical-align: middle;
+	background: var(--white);
+}
+
+.table-hover tbody tr:hover { 
+	background-color: var(--bg-light);
+	transition: background-color 0.2s ease;
+}
+
+/* Progress Bars - 57357 Style: Orange for high risk, appropriate colors for others */
+.progress { 
+	background-color: var(--bg-light); 
+	border-radius: 6px; 
+	height: 20px;
+	overflow: hidden;
+	border: 1px solid var(--border);
+}
+
+.progress-bar { 
+	border-radius: 6px; 
+	background: var(--primary);
+	transition: width 0.6s ease;
+}
+
+.progress-bar.bg-success {
+	background: var(--success) !important;
+}
+
+.progress-bar.bg-warning {
+	background: var(--orange) !important;
+}
+
+.progress-bar.bg-danger {
+	background: var(--danger) !important;
+}
+
+/* Badges - Hospital Style */
+.badge { 
+	font-weight: 600;
+	padding: 0.5rem 0.75rem;
+	border-radius: 6px;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.badge.bg-success { 
+	background: var(--success) !important;
+	color: #fff;
+}
+
+.badge.bg-warning { 
+	background: var(--warning) !important; 
+	color: #1a1a1a;
+}
+
+.badge.bg-danger { 
+	background: var(--danger) !important;
+	color: #fff;
+}
+
+/* Risk summary cards - 57357 Style: White with colored borders */
+.risk-summary-card { 
+	border: 2px solid var(--border);
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	background: var(--white);
+}
+
+.risk-summary-card.low-risk { 
+	background: var(--white); 
+	border-color: var(--success);
+	border-left: 4px solid var(--success);
+}
+
+.risk-summary-card.moderate-risk { 
+	background: var(--white); 
+	border-color: var(--warning);
+	border-left: 4px solid var(--warning);
+}
+
+.risk-summary-card.high-risk { 
+	background: var(--white); 
+	border-color: var(--orange);
+	border-left: 4px solid var(--orange);
+}
+
+/* Search input group */
+.input-group .input-group-text { background-color: #f1f6ff; border-right: none; }
+.input-group .form-control { border-left: none; }
+
+/* Navbar - 57357 Style: Blue background, white text */
+.navbar {
+	background: var(--primary) !important;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	padding: 0.75rem 0;
+}
+
+.navbar-brand { 
+	font-weight: 700; 
+	font-size: 1.4rem;
+	color: var(--white) !important;
+	letter-spacing: 0.5px;
+}
+
+.navbar-brand:hover {
+	color: var(--white) !important;
+	opacity: 0.9;
+}
+
+.navbar-nav .nav-link {
+	color: var(--white) !important;
+	font-weight: 500;
+	padding: 0.5rem 1rem;
+	transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+	color: var(--white) !important;
+	background-color: rgba(255, 255, 255, 0.15);
+	border-radius: 4px;
+}
+
+.navbar-nav .nav-link.active {
+	color: var(--white) !important;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 4px;
+}
+
+.navbar-text {
+	color: var(--white) !important;
+	font-weight: 500;
+}
+
+/* Subtle animations */
+.prediction-row-new { animation: fadeIn 0.5s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Performance metrics */
+.metric-card {
+    padding: 1rem;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.metric-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.25rem;
+}
+
+.metric-description {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Risk summary cards */
+.risk-summary-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.risk-summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.risk-summary-card.low-risk { background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.1)); border-color: rgba(39,174,96,0.4); }
+.risk-summary-card.moderate-risk { background: linear-gradient(135deg, rgba(241, 196, 15, 0.2), rgba(241, 196, 15, 0.12)); border-color: rgba(241,196,15,0.45); }
+.risk-summary-card.high-risk { background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(231, 76, 60, 0.1)); border-color: rgba(231,76,60,0.4); }
+
+.risk-count {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.risk-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.risk-range {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Performance metrics on home page */
+.performance-metric {
+    padding: 1rem;
+}
+
+.performance-metric .metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.performance-metric .metric-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Info stats */
+.info-stat {
+    padding: 1rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #495057;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Table styles */
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+    color: var(--text);
+}
+
+.table th {
+	background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+	color: #fff;
+	border: none;
+	padding: 1rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.table td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border-color: rgba(255,255,255,0.06);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255,255,255,0.05);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Progress bars */
+.progress {
+	border-radius: 12px;
+	height: 18px;
+	background-color: rgba(255,255,255,0.08);
+}
+
+.progress-bar {
+	border-radius: 12px;
+	transition: width 0.6s ease;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}
+
+.badge.bg-success { background-color: #27ae60 !important; }
+.badge.bg-warning { background-color: #f1c40f !important; color: #2c3e50; }
+.badge.bg-danger { background-color: #e74c3c !important; }
+
+/* Buttons - Hospital Professional Style */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-success {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.btn-warning {
+    background: var(--warning);
+    border-color: var(--warning);
+    color: #1a1a1a;
+}
+
+.btn-danger {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+/* Form Controls - 57357 Style: White background, blue focus */
+.form-control,
+.input-group-text {
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    background-color: var(--white);
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.form-control:focus {
+	border-color: var(--primary);
+	box-shadow: 0 0 0 0.2rem rgba(0, 114, 188, 0.15);
+    outline: none;
+}
+
+.form-select {
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    background-color: var(--white);
+    font-size: 0.95rem;
+}
+
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 114, 188, 0.15);
+    outline: none;
+}
+
+/* Alerts - 57357 Style: White background with colored left border */
+.alert {
+    border-radius: 6px;
+    border-left: 4px solid;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    padding: 1rem 1.25rem;
+    background: var(--white);
+}
+
+.alert-success {
+    background: var(--white);
+    border-left-color: var(--success);
+    color: #155724;
+}
+
+.alert-info {
+    background: var(--white);
+    border-left-color: var(--primary);
+    color: #0c5460;
+}
+
+.alert-warning {
+    background: var(--white);
+    border-left-color: var(--orange);
+    color: #856404;
+}
+
+.alert-danger {
+    background: var(--white);
+    border-left-color: var(--danger);
+    color: #721c24;
+}
+
+/* Chart container */
+#riskDistributionChart {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+/* Search box */
+.input-group .form-control {
+    border-left: none;
+}
+
+.input-group .input-group-text {
+    background-color: var(--bg-light);
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+}
+
+/* Loading animation - 57357 Style */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--bg-light);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Prediction cards hover effect */
+.prediction-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.prediction-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Footer - 57357 Style: Dark blue background */
+footer {
+    margin-top: auto;
+    font-size: 0.9rem;
+    background: var(--primary-dark);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 1.5rem 0;
+}
+
+footer p {
+    margin: 0;
+    font-weight: 500;
+}
+
+footer strong {
+    color: var(--white);
+}
+
+footer a {
+    color: var(--orange-light);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--orange);
+}
+
+/* Risk level row highlighting - 57357 Style */
+tr[data-risk="high"] {
+    border-left: 4px solid var(--orange);
+}
+
+tr[data-risk="moderate"] {
+    border-left: 4px solid var(--warning);
+}
+
+tr[data-risk="low"] {
+    border-left: 4px solid var(--success);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .metric-value {
+        font-size: 2rem;
+    }
+    
+    .risk-count {
+        font-size: 2.5rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .metric-value {
+        font-size: 1.5rem;
+    }
+    
+    .risk-count {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Custom scrollbar for tables */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Animation for new predictions */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.prediction-row-new {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Status indicators */
+.status-online {
+    color: #28a745;
+}
+
+.status-offline {
+    color: #dc3545;
+}
+
+.status-updating {
+    color: #ffc107;
+}
+
+/* Pulse animation for updating status */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.updating {
+    animation: pulse 1.5s infinite;
+} 
